@@ -1,41 +1,660 @@
 <!doctype html>
+
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1, viewport-fit=cover"
+
+>
+
+  <meta name="theme-color" content="#101b2b">
+
+<meta
+name="description"
+content="Open and join a Minecraft Bedrock world using an activity handle."
+
+>
+
   <title>Join Minecraft World</title>
+
   <style>
-    body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #0b1220; color: #f8fafc; font-family: Arial, sans-serif; }
-    main { width: min(92vw, 520px); padding: 28px; border: 1px solid #263652; border-radius: 12px; background: #111c2e; }
-    a { color: #74c0fc; }
-    code { overflow-wrap: anywhere; }
+    :root {
+      color-scheme: dark;
+
+      --background: #07101d;
+      --background-secondary: #0d1929;
+      --card: rgba(17, 30, 49, 0.92);
+      --card-border: rgba(148, 163, 184, 0.2);
+
+      --text: #f8fafc;
+      --text-muted: #a9b6c8;
+
+      --green: #52b043;
+      --green-hover: #62c951;
+      --green-dark: #2f7d32;
+
+      --blue: #74c0fc;
+      --red: #ff6b6b;
+      --yellow: #ffd43b;
+
+      --shadow:
+        0 24px 70px rgba(0, 0, 0, 0.45),
+        0 0 0 1px rgba(255, 255, 255, 0.025);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      min-height: 100dvh;
+
+      display: grid;
+      place-items: center;
+
+      padding:
+        max(24px, env(safe-area-inset-top))
+        max(18px, env(safe-area-inset-right))
+        max(24px, env(safe-area-inset-bottom))
+        max(18px, env(safe-area-inset-left));
+
+      overflow-x: hidden;
+
+      color: var(--text);
+
+      font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+      background:
+        radial-gradient(
+          circle at 15% 20%,
+          rgba(50, 130, 184, 0.22),
+          transparent 32%
+        ),
+        radial-gradient(
+          circle at 85% 80%,
+          rgba(82, 176, 67, 0.16),
+          transparent 30%
+        ),
+        linear-gradient(
+          145deg,
+          var(--background),
+          var(--background-secondary)
+        );
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+
+      opacity: 0.12;
+
+      background-image:
+        linear-gradient(
+          rgba(255, 255, 255, 0.04) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0.04) 1px,
+          transparent 1px
+        );
+
+      background-size: 32px 32px;
+      mask-image: linear-gradient(to bottom, black, transparent);
+    }
+
+    main {
+      position: relative;
+      width: min(100%, 560px);
+
+      padding: clamp(24px, 5vw, 38px);
+
+      border: 1px solid var(--card-border);
+      border-radius: 22px;
+
+      background: var(--card);
+      box-shadow: var(--shadow);
+
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+
+      text-align: center;
+    }
+
+    .logo {
+      width: 94px;
+      height: 94px;
+
+      display: grid;
+      place-items: center;
+
+      margin: 0 auto 20px;
+
+      border: 3px solid rgba(255, 255, 255, 0.15);
+      border-radius: 22px;
+
+      background:
+        linear-gradient(
+          145deg,
+          var(--green-hover),
+          var(--green-dark)
+        );
+
+      box-shadow:
+        0 16px 34px rgba(0, 0, 0, 0.28),
+        inset 0 2px 0 rgba(255, 255, 255, 0.18);
+    }
+
+    .logo svg {
+      width: 58px;
+      height: 58px;
+      filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.28));
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+
+      color: var(--green-hover);
+
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+
+      font-size: clamp(1.7rem, 7vw, 2.55rem);
+      line-height: 1.1;
+      letter-spacing: -0.035em;
+    }
+
+    #status {
+      min-height: 48px;
+      margin: 15px auto 0;
+
+      color: var(--text-muted);
+
+      font-size: 1rem;
+      line-height: 1.55;
+    }
+
+    .loader {
+      width: 46px;
+      height: 46px;
+
+      margin: 24px auto;
+
+      border: 5px solid rgba(255, 255, 255, 0.1);
+      border-top-color: var(--green-hover);
+      border-radius: 50%;
+
+      animation: spin 0.85s linear infinite;
+    }
+
+    .loader.hidden {
+      display: none;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .actions {
+      display: grid;
+      gap: 12px;
+
+      margin-top: 24px;
+    }
+
+    button,
+    .button {
+      width: 100%;
+      min-height: 52px;
+
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+
+      padding: 13px 18px;
+
+      border: 0;
+      border-radius: 12px;
+
+      font: inherit;
+      font-weight: 750;
+
+      text-decoration: none;
+      cursor: pointer;
+
+      transition:
+        transform 150ms ease,
+        background-color 150ms ease,
+        border-color 150ms ease,
+        opacity 150ms ease;
+    }
+
+    button:hover,
+    .button:hover {
+      transform: translateY(-1px);
+    }
+
+    button:active,
+    .button:active {
+      transform: translateY(1px);
+    }
+
+    button:focus-visible,
+    .button:focus-visible {
+      outline: 3px solid rgba(116, 192, 252, 0.45);
+      outline-offset: 3px;
+    }
+
+    .primary {
+      color: #ffffff;
+      background: var(--green);
+
+      box-shadow:
+        0 8px 20px rgba(82, 176, 67, 0.22),
+        inset 0 1px 0 rgba(255, 255, 255, 0.16);
+    }
+
+    .primary:hover {
+      background: var(--green-hover);
+    }
+
+    .secondary {
+      color: var(--text);
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .details {
+      margin-top: 22px;
+      padding-top: 20px;
+
+      border-top: 1px solid rgba(148, 163, 184, 0.14);
+
+      text-align: left;
+    }
+
+    .details-label {
+      display: block;
+      margin-bottom: 8px;
+
+      color: var(--text-muted);
+
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    code {
+      display: block;
+
+      max-height: 110px;
+      overflow: auto;
+      overflow-wrap: anywhere;
+
+      padding: 13px 14px;
+
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      border-radius: 10px;
+
+      color: #c9e7ff;
+      background: rgba(1, 7, 15, 0.55);
+
+      font-family:
+        "Cascadia Code",
+        "SFMono-Regular",
+        Consolas,
+        monospace;
+
+      font-size: 0.8rem;
+      line-height: 1.5;
+    }
+
+    .notice {
+      margin-top: 19px;
+
+      color: var(--text-muted);
+
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+
+    .notice strong {
+      color: var(--text);
+    }
+
+    .error {
+      color: var(--red) !important;
+    }
+
+    .success {
+      color: #8ce99a !important;
+    }
+
+    .warning {
+      color: var(--yellow) !important;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: max(24px, env(safe-area-inset-bottom));
+
+      z-index: 20;
+
+      padding: 11px 16px;
+
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      border-radius: 999px;
+
+      color: var(--text);
+      background: rgba(10, 19, 32, 0.95);
+
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
+
+      font-size: 0.9rem;
+      font-weight: 650;
+
+      opacity: 0;
+      pointer-events: none;
+
+      transform: translate(-50%, 16px);
+
+      transition:
+        opacity 180ms ease,
+        transform 180ms ease;
+    }
+
+    .toast.visible {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    @media (max-width: 480px) {
+      main {
+        border-radius: 18px;
+      }
+
+      .logo {
+        width: 82px;
+        height: 82px;
+      }
+
+      .logo svg {
+        width: 50px;
+        height: 50px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
   </style>
+
 </head>
+
 <body>
   <main>
-    <h1>Opening Minecraft...</h1>
-    <p id="status">Preparing join link.</p>
-    <p><a id="manual" href="#">Tap here if Minecraft does not open</a></p>
-    <p><code id="url"></code></p>
+    <div class="logo" aria-hidden="true">
+      <svg viewBox="0 0 64 64" role="img">
+        <path
+          fill="#6f4e37"
+          d="M8 8h48v48H8z"
+        />
+        <path
+          fill="#68b943"
+          d="M8 8h48v17H8z"
+        />
+        <path
+          fill="#4d9136"
+          d="M8 19h12v9H8zm23-11h11v13H31zm15 7h10v12H46z"
+        />
+        <path
+          fill="#8b6042"
+          d="M8 34h12v11H8zm24-9h12v14H32zm14 17h10v14H46z"
+        />
+        <path
+          fill="#5f412f"
+          d="M20 25h12v13H20zm0 20h13v11H20z"
+        />
+      </svg>
+    </div>
+
+<p class="eyebrow">Minecraft Bedrock</p>
+
+<h1 id="title">Opening Minecraft...</h1>
+
+<p id="status" role="status" aria-live="polite">
+  Preparing your world join link.
+</p>
+
+<div
+  id="loader"
+  class="loader"
+  aria-label="Loading"
+></div>
+
+<div id="actions" class="actions hidden">
+  <a
+    id="openButton"
+    class="button primary"
+    href="#"
+  >
+    <span aria-hidden="true">▶</span>
+    Open Minecraft
+  </a>
+
+  <button
+    id="copyButton"
+    class="secondary"
+    type="button"
+  >
+    <span aria-hidden="true">⧉</span>
+    Copy join link
+  </button>
+</div>
+
+<div id="details" class="details hidden">
+  <span class="details-label">Join URL</span>
+  <code id="url"></code>
+</div>
+
+<p id="notice" class="notice">
+  Minecraft Bedrock must be installed on this device.
+</p>
+
   </main>
+
+  <div
+    id="toast"
+    class="toast"
+    role="status"
+    aria-live="polite"
+  ></div>
+
   <script>
-    const params = new URLSearchParams(location.search);
-    let handle = params.get("handle") || "";
+    (() => {
+      "use strict";
 
-    if (!handle) {
-      const parts = location.pathname.split("/").filter(Boolean);
-      handle = parts[parts.length - 1] || "";
-    }
+      const elements = {
+        title: document.getElementById("title"),
+        status: document.getElementById("status"),
+        loader: document.getElementById("loader"),
+        actions: document.getElementById("actions"),
+        openButton: document.getElementById("openButton"),
+        copyButton: document.getElementById("copyButton"),
+        details: document.getElementById("details"),
+        url: document.getElementById("url"),
+        notice: document.getElementById("notice"),
+        toast: document.getElementById("toast"),
+      };
 
-    if (!/^[0-9a-f-]{20,}$/i.test(handle)) {
-      document.getElementById("status").textContent = "Missing or invalid world handle.";
-      document.getElementById("manual").style.display = "none";
-    } else {
-      const url = `minecraft://activityHandleJoin/?handle=${encodeURIComponent(handle)}`;
-      document.getElementById("manual").href = url;
-      document.getElementById("url").textContent = url;
-      location.href = url;
-    }
+      const params = new URLSearchParams(window.location.search);
+
+      const repositoryName = "ac";
+
+      let handle = (params.get("handle") || "").trim();
+
+      if (!handle) {
+        const parts = window.location.pathname
+          .split("/")
+          .filter(Boolean)
+          .map((part) => decodeURIComponent(part));
+
+        const lastPart = parts.at(-1) || "";
+
+        if (
+          lastPart &&
+          lastPart.toLowerCase() !== repositoryName.toLowerCase() &&
+          lastPart.toLowerCase() !== "index.html"
+        ) {
+          handle = lastPart;
+        }
+      }
+
+      const handlePattern =
+        /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+      function showToast(message) {
+        elements.toast.textContent = message;
+        elements.toast.classList.add("visible");
+
+        window.clearTimeout(showToast.timer);
+
+        showToast.timer = window.setTimeout(() => {
+          elements.toast.classList.remove("visible");
+        }, 2200);
+      }
+
+      function showError(message) {
+        elements.title.textContent = "Unable to join";
+        elements.status.textContent = message;
+        elements.status.className = "error";
+
+        elements.loader.classList.add("hidden");
+        elements.actions.classList.add("hidden");
+        elements.details.classList.add("hidden");
+
+        elements.notice.innerHTML =
+          "Use a URL in this format:<br>" +
+          "<strong>?handle=YOUR-WORLD-HANDLE</strong>";
+      }
+
+      function tryOpenMinecraft(joinUrl) {
+        elements.status.textContent =
+          "Minecraft should open automatically. Use the button below if nothing happens.";
+
+        elements.status.className = "";
+
+        window.setTimeout(() => {
+          window.location.assign(joinUrl);
+        }, 650);
+      }
+
+      async function copyJoinUrl(joinUrl) {
+        try {
+          await navigator.clipboard.writeText(joinUrl);
+          showToast("Join link copied");
+        } catch {
+          const textArea = document.createElement("textarea");
+
+          textArea.value = joinUrl;
+          textArea.setAttribute("readonly", "");
+          textArea.style.position = "fixed";
+          textArea.style.opacity = "0";
+
+          document.body.appendChild(textArea);
+          textArea.select();
+
+          const copied = document.execCommand("copy");
+
+          textArea.remove();
+
+          showToast(
+            copied
+              ? "Join link copied"
+              : "Could not copy the link"
+          );
+        }
+      }
+
+      if (!handle) {
+        showError("No Minecraft world handle was provided.");
+        return;
+      }
+
+      if (!handlePattern.test(handle)) {
+        showError("The Minecraft world handle is invalid.");
+        return;
+      }
+
+      const joinUrl =
+        `minecraft://activityHandleJoin/?handle=${encodeURIComponent(handle)}`;
+
+      elements.openButton.href = joinUrl;
+      elements.url.textContent = joinUrl;
+
+      elements.actions.classList.remove("hidden");
+      elements.details.classList.remove("hidden");
+
+      elements.copyButton.addEventListener("click", () => {
+        copyJoinUrl(joinUrl);
+      });
+
+      elements.openButton.addEventListener("click", () => {
+        elements.status.textContent = "Opening Minecraft...";
+        elements.status.className = "success";
+      });
+
+      window.setTimeout(() => {
+        elements.loader.classList.add("hidden");
+      }, 1600);
+
+      tryOpenMinecraft(joinUrl);
+    })();
   </script>
+
 </body>
 </html>
