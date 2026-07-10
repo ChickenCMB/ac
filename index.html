@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Join Minecraft World</title>
+  <style>
+    body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #0b1220; color: #f8fafc; font-family: Arial, sans-serif; }
+    main { width: min(92vw, 520px); padding: 28px; border: 1px solid #263652; border-radius: 12px; background: #111c2e; }
+    a { color: #74c0fc; }
+    code { overflow-wrap: anywhere; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Opening Minecraft...</h1>
+    <p id="status">Preparing join link.</p>
+    <p><a id="manual" href="#">Tap here if Minecraft does not open</a></p>
+    <p><code id="url"></code></p>
+  </main>
+  <script>
+    const params = new URLSearchParams(location.search);
+    let handle = params.get("handle") || "";
+
+    if (!handle) {
+      const parts = location.pathname.split("/").filter(Boolean);
+      handle = parts[parts.length - 1] || "";
+    }
+
+    if (!/^[0-9a-f-]{20,}$/i.test(handle)) {
+      document.getElementById("status").textContent = "Missing or invalid world handle.";
+      document.getElementById("manual").style.display = "none";
+    } else {
+      const url = `minecraft://activityHandleJoin/?handle=${encodeURIComponent(handle)}`;
+      document.getElementById("manual").href = url;
+      document.getElementById("url").textContent = url;
+      location.href = url;
+    }
+  </script>
+</body>
+</html>
