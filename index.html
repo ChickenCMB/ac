@@ -1,23 +1,10 @@
 <!doctype html>
-
 <html lang="en">
 <head>
   <meta charset="utf-8">
-
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1, viewport-fit=cover"
-
->
-
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#101b2b">
-
-<meta
-name="description"
-content="Open and join a Minecraft Bedrock world using an activity handle."
-
->
-
+  <meta name="description" content="Open and join a Minecraft Bedrock world using an activity handle.">
   <title>Join Minecraft World</title>
 
   <style>
@@ -45,13 +32,8 @@ content="Open and join a Minecraft Bedrock world using an activity handle."
         0 0 0 1px rgba(255, 255, 255, 0.025);
     }
 
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      min-height: 100%;
-    }
+    * { box-sizing: border-box; }
+    html { min-height: 100%; }
 
     body {
       margin: 0;
@@ -68,34 +50,14 @@ content="Open and join a Minecraft Bedrock world using an activity handle."
         max(18px, env(safe-area-inset-left));
 
       overflow-x: hidden;
-
       color: var(--text);
 
-      font-family:
-        Inter,
-        ui-sans-serif,
-        system-ui,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        sans-serif;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
       background:
-        radial-gradient(
-          circle at 15% 20%,
-          rgba(50, 130, 184, 0.22),
-          transparent 32%
-        ),
-        radial-gradient(
-          circle at 85% 80%,
-          rgba(82, 176, 67, 0.16),
-          transparent 30%
-        ),
-        linear-gradient(
-          145deg,
-          var(--background),
-          var(--background-secondary)
-        );
+        radial-gradient(circle at 15% 20%, rgba(50, 130, 184, 0.22), transparent 32%),
+        radial-gradient(circle at 85% 80%, rgba(82, 176, 67, 0.16), transparent 30%),
+        linear-gradient(145deg, var(--background), var(--background-secondary));
     }
 
     body::before {
@@ -103,64 +65,45 @@ content="Open and join a Minecraft Bedrock world using an activity handle."
       position: fixed;
       inset: 0;
       pointer-events: none;
-
       opacity: 0.12;
-
       background-image:
-        linear-gradient(
-          rgba(255, 255, 255, 0.04) 1px,
-          transparent 1px
-        ),
-        linear-gradient(
-          90deg,
-          rgba(255, 255, 255, 0.04) 1px,
-          transparent 1px
-        );
-
+        linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
       background-size: 32px 32px;
       mask-image: linear-gradient(to bottom, black, transparent);
     }
 
     main {
       position: relative;
-      width: min(100%, 560px);
-
-      padding: clamp(24px, 5vw, 38px);
-
+      width: min(100%, 460px);
+      padding: clamp(28px, 6vw, 42px);
       border: 1px solid var(--card-border);
-      border-radius: 22px;
-
+      border-radius: 24px;
       background: var(--card);
       box-shadow: var(--shadow);
-
       backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
-
       text-align: center;
     }
 
     .logo {
-      width: 94px;
-      height: 94px;
-
+      width: 96px;
+      height: 96px;
       display: grid;
       place-items: center;
-
-      margin: 0 auto 20px;
-
+      margin: 0 auto 22px;
       border: 3px solid rgba(255, 255, 255, 0.15);
-      border-radius: 22px;
-
-      background:
-        linear-gradient(
-          145deg,
-          var(--green-hover),
-          var(--green-dark)
-        );
-
+      border-radius: 24px;
+      background: linear-gradient(145deg, var(--green-hover), var(--green-dark));
       box-shadow:
         0 16px 34px rgba(0, 0, 0, 0.28),
         inset 0 2px 0 rgba(255, 255, 255, 0.18);
+      animation: float 3.2s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
     }
 
     .logo svg {
@@ -171,9 +114,7 @@ content="Open and join a Minecraft Bedrock world using an activity handle."
 
     .eyebrow {
       margin: 0 0 8px;
-
       color: var(--green-hover);
-
       font-size: 0.76rem;
       font-weight: 800;
       letter-spacing: 0.16em;
@@ -182,92 +123,61 @@ content="Open and join a Minecraft Bedrock world using an activity handle."
 
     h1 {
       margin: 0;
-
-      font-size: clamp(1.7rem, 7vw, 2.55rem);
+      font-size: clamp(1.7rem, 7vw, 2.4rem);
       line-height: 1.1;
       letter-spacing: -0.035em;
     }
 
     #status {
-      min-height: 48px;
-      margin: 15px auto 0;
-
+      min-height: 44px;
+      margin: 14px auto 0;
       color: var(--text-muted);
-
       font-size: 1rem;
       line-height: 1.55;
     }
 
     .loader {
-      width: 46px;
-      height: 46px;
-
-      margin: 24px auto;
-
+      width: 44px;
+      height: 44px;
+      margin: 22px auto;
       border: 5px solid rgba(255, 255, 255, 0.1);
       border-top-color: var(--green-hover);
       border-radius: 50%;
-
       animation: spin 0.85s linear infinite;
     }
 
-    .loader.hidden {
-      display: none;
-    }
+    .loader.hidden { display: none; }
 
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
     .actions {
       display: grid;
       gap: 12px;
-
-      margin-top: 24px;
+      margin-top: 26px;
     }
 
-    button,
-    .button {
+    button, .button {
       width: 100%;
-      min-height: 52px;
-
+      min-height: 54px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 9px;
-
       padding: 13px 18px;
-
       border: 0;
-      border-radius: 12px;
-
+      border-radius: 14px;
       font: inherit;
       font-weight: 750;
-
+      font-size: 1.02rem;
       text-decoration: none;
       cursor: pointer;
-
-      transition:
-        transform 150ms ease,
-        background-color 150ms ease,
-        border-color 150ms ease,
-        opacity 150ms ease;
+      transition: transform 150ms ease, background-color 150ms ease, border-color 150ms ease, opacity 150ms ease, box-shadow 150ms ease;
     }
 
-    button:hover,
-    .button:hover {
-      transform: translateY(-1px);
-    }
+    button:hover, .button:hover { transform: translateY(-1px); }
+    button:active, .button:active { transform: translateY(1px); }
 
-    button:active,
-    .button:active {
-      transform: translateY(1px);
-    }
-
-    button:focus-visible,
-    .button:focus-visible {
+    button:focus-visible, .button:focus-visible {
       outline: 3px solid rgba(116, 192, 252, 0.45);
       outline-offset: 3px;
     }
@@ -275,129 +185,63 @@ content="Open and join a Minecraft Bedrock world using an activity handle."
     .primary {
       color: #ffffff;
       background: var(--green);
-
       box-shadow:
-        0 8px 20px rgba(82, 176, 67, 0.22),
+        0 10px 24px rgba(82, 176, 67, 0.28),
         inset 0 1px 0 rgba(255, 255, 255, 0.16);
     }
 
     .primary:hover {
       background: var(--green-hover);
+      box-shadow:
+        0 12px 28px rgba(82, 176, 67, 0.36),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
     }
 
     .secondary {
-      color: var(--text);
-      border: 1px solid rgba(148, 163, 184, 0.22);
-      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-muted);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      background: rgba(255, 255, 255, 0.04);
+      font-size: 0.92rem;
+      min-height: 44px;
     }
 
     .secondary:hover {
-      background: rgba(255, 255, 255, 0.1);
-    }
-
-    .details {
-      margin-top: 22px;
-      padding-top: 20px;
-
-      border-top: 1px solid rgba(148, 163, 184, 0.14);
-
-      text-align: left;
-    }
-
-    .details-label {
-      display: block;
-      margin-bottom: 8px;
-
-      color: var(--text-muted);
-
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    code {
-      display: block;
-
-      max-height: 110px;
-      overflow: auto;
-      overflow-wrap: anywhere;
-
-      padding: 13px 14px;
-
-      border: 1px solid rgba(148, 163, 184, 0.16);
-      border-radius: 10px;
-
-      color: #c9e7ff;
-      background: rgba(1, 7, 15, 0.55);
-
-      font-family:
-        "Cascadia Code",
-        "SFMono-Regular",
-        Consolas,
-        monospace;
-
-      font-size: 0.8rem;
-      line-height: 1.5;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.08);
     }
 
     .notice {
-      margin-top: 19px;
-
+      margin-top: 20px;
       color: var(--text-muted);
-
       font-size: 0.82rem;
       line-height: 1.5;
     }
 
-    .notice strong {
-      color: var(--text);
-    }
+    .notice strong { color: var(--text); }
 
-    .error {
-      color: var(--red) !important;
-    }
+    .error { color: var(--red) !important; }
+    .success { color: #8ce99a !important; }
+    .warning { color: var(--yellow) !important; }
 
-    .success {
-      color: #8ce99a !important;
-    }
-
-    .warning {
-      color: var(--yellow) !important;
-    }
-
-    .hidden {
-      display: none !important;
-    }
+    .hidden { display: none !important; }
 
     .toast {
       position: fixed;
       left: 50%;
       bottom: max(24px, env(safe-area-inset-bottom));
-
       z-index: 20;
-
       padding: 11px 16px;
-
       border: 1px solid rgba(148, 163, 184, 0.22);
       border-radius: 999px;
-
       color: var(--text);
       background: rgba(10, 19, 32, 0.95);
-
       box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
-
       font-size: 0.9rem;
       font-weight: 650;
-
       opacity: 0;
       pointer-events: none;
-
       transform: translate(-50%, 16px);
-
-      transition:
-        opacity 180ms ease,
-        transform 180ms ease;
+      transition: opacity 180ms ease, transform 180ms ease;
     }
 
     .toast.visible {
@@ -406,25 +250,13 @@ content="Open and join a Minecraft Bedrock world using an activity handle."
     }
 
     @media (max-width: 480px) {
-      main {
-        border-radius: 18px;
-      }
-
-      .logo {
-        width: 82px;
-        height: 82px;
-      }
-
-      .logo svg {
-        width: 50px;
-        height: 50px;
-      }
+      main { border-radius: 20px; }
+      .logo { width: 82px; height: 82px; }
+      .logo svg { width: 50px; height: 50px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      *,
-      *::before,
-      *::after {
+      *, *::before, *::after {
         scroll-behavior: auto !important;
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
@@ -432,87 +264,47 @@ content="Open and join a Minecraft Bedrock world using an activity handle."
       }
     }
   </style>
-
 </head>
 
 <body>
   <main>
     <div class="logo" aria-hidden="true">
       <svg viewBox="0 0 64 64" role="img">
-        <path
-          fill="#6f4e37"
-          d="M8 8h48v48H8z"
-        />
-        <path
-          fill="#68b943"
-          d="M8 8h48v17H8z"
-        />
-        <path
-          fill="#4d9136"
-          d="M8 19h12v9H8zm23-11h11v13H31zm15 7h10v12H46z"
-        />
-        <path
-          fill="#8b6042"
-          d="M8 34h12v11H8zm24-9h12v14H32zm14 17h10v14H46z"
-        />
-        <path
-          fill="#5f412f"
-          d="M20 25h12v13H20zm0 20h13v11H20z"
-        />
+        <path fill="#6f4e37" d="M8 8h48v48H8z" />
+        <path fill="#68b943" d="M8 8h48v17H8z" />
+        <path fill="#4d9136" d="M8 19h12v9H8zm23-11h11v13H31zm15 7h10v12H46z" />
+        <path fill="#8b6042" d="M8 34h12v11H8zm24-9h12v14H32zm14 17h10v14H46z" />
+        <path fill="#5f412f" d="M20 25h12v13H20zm0 20h13v11H20z" />
       </svg>
     </div>
 
-<p class="eyebrow">Minecraft Bedrock</p>
+    <p class="eyebrow">Minecraft Bedrock</p>
+    <h1 id="title">Opening Minecraft...</h1>
 
-<h1 id="title">Opening Minecraft...</h1>
+    <p id="status" role="status" aria-live="polite">
+      Preparing your world join link.
+    </p>
 
-<p id="status" role="status" aria-live="polite">
-  Preparing your world join link.
-</p>
+    <div id="loader" class="loader" aria-label="Loading"></div>
 
-<div
-  id="loader"
-  class="loader"
-  aria-label="Loading"
-></div>
+    <div id="actions" class="actions hidden">
+      <a id="openButton" class="button primary" href="#">
+        <span aria-hidden="true">▶</span>
+        Open Minecraft
+      </a>
 
-<div id="actions" class="actions hidden">
-  <a
-    id="openButton"
-    class="button primary"
-    href="#"
-  >
-    <span aria-hidden="true">▶</span>
-    Open Minecraft
-  </a>
+      <button id="copyButton" class="secondary" type="button">
+        <span aria-hidden="true">⧉</span>
+        Copy join link
+      </button>
+    </div>
 
-  <button
-    id="copyButton"
-    class="secondary"
-    type="button"
-  >
-    <span aria-hidden="true">⧉</span>
-    Copy join link
-  </button>
-</div>
-
-<div id="details" class="details hidden">
-  <span class="details-label">Join URL</span>
-  <code id="url"></code>
-</div>
-
-<p id="notice" class="notice">
-  Minecraft Bedrock must be installed on this device.
-</p>
-
+    <p id="notice" class="notice">
+      Minecraft Bedrock must be installed on this device.
+    </p>
   </main>
 
-  <div
-    id="toast"
-    class="toast"
-    role="status"
-    aria-live="polite"
-  ></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
   <script>
     (() => {
@@ -525,14 +317,11 @@ content="Open and join a Minecraft Bedrock world using an activity handle."
         actions: document.getElementById("actions"),
         openButton: document.getElementById("openButton"),
         copyButton: document.getElementById("copyButton"),
-        details: document.getElementById("details"),
-        url: document.getElementById("url"),
         notice: document.getElementById("notice"),
         toast: document.getElementById("toast"),
       };
 
       const params = new URLSearchParams(window.location.search);
-
       const repositoryName = "ac";
 
       let handle = (params.get("handle") || "").trim();
@@ -554,8 +343,7 @@ content="Open and join a Minecraft Bedrock world using an activity handle."
         }
       }
 
-      const handlePattern =
-        /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+      const handlePattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
       function showToast(message) {
         elements.toast.textContent = message;
@@ -575,7 +363,6 @@ content="Open and join a Minecraft Bedrock world using an activity handle."
 
         elements.loader.classList.add("hidden");
         elements.actions.classList.add("hidden");
-        elements.details.classList.add("hidden");
 
         elements.notice.innerHTML =
           "Use a URL in this format:<br>" +
@@ -585,7 +372,6 @@ content="Open and join a Minecraft Bedrock world using an activity handle."
       function tryOpenMinecraft(joinUrl) {
         elements.status.textContent =
           "Minecraft should open automatically. Use the button below if nothing happens.";
-
         elements.status.className = "";
 
         window.setTimeout(() => {
@@ -612,11 +398,7 @@ content="Open and join a Minecraft Bedrock world using an activity handle."
 
           textArea.remove();
 
-          showToast(
-            copied
-              ? "Join link copied"
-              : "Could not copy the link"
-          );
+          showToast(copied ? "Join link copied" : "Could not copy the link");
         }
       }
 
@@ -630,14 +412,10 @@ content="Open and join a Minecraft Bedrock world using an activity handle."
         return;
       }
 
-      const joinUrl =
-        `minecraft://activityHandleJoin/?handle=${encodeURIComponent(handle)}`;
+      const joinUrl = `minecraft://activityHandleJoin/?handle=${encodeURIComponent(handle)}`;
 
       elements.openButton.href = joinUrl;
-      elements.url.textContent = joinUrl;
-
       elements.actions.classList.remove("hidden");
-      elements.details.classList.remove("hidden");
 
       elements.copyButton.addEventListener("click", () => {
         copyJoinUrl(joinUrl);
@@ -655,6 +433,5 @@ content="Open and join a Minecraft Bedrock world using an activity handle."
       tryOpenMinecraft(joinUrl);
     })();
   </script>
-
 </body>
 </html>
